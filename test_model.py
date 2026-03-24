@@ -4,10 +4,7 @@ from tensorflow.keras.models import load_model
 import os
 import threading
 import time
-
-# --- 1. MAC VOICE ENGINE ---
 speech_lock = False
-
 def speak(text):
     global speech_lock
     if speech_lock:
@@ -16,19 +13,16 @@ def speak(text):
     def run():
         global speech_lock
         speech_lock = True
-        # Clean text: "GO_AWAY" becomes "Go Away"
         clean_text = str(text).strip().replace("_", " ")
         os.system(f'say "{clean_text}"')
         speech_lock = False
         
     threading.Thread(target=run, daemon=True).start()
-
-# --- 2. YOUR EXACT ORDER ---
 signs = ["HELLO", "YES", "NO", "COME", "OK", "SPIN", "CLAP", "UP", "DOWN", "GO_AWAY"]
 model = load_model('action_model.h5')
 
 sequence = []
-threshold = 0.7  # Raising back to 0.7 for better accuracy
+threshold = 0.7  
 last_spoken = ""
 last_speech_time = 0
 
@@ -43,9 +37,7 @@ while cap.isOpened():
     if not ret: break
     
     frame = cv2.flip(frame, 1)
-    box_color = (255, 0, 0) # Default Blue
-    
-    # ROI Pre-processing
+    box_color = (255, 0, 0) 
     roi = frame[start_y:start_y+box_size, start_x:start_x+box_size]
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
     res = cv2.resize(gray, (64, 64))
@@ -62,32 +54,23 @@ while cap.isOpened():
         prediction_idx = np.argmax(res)
         confidence = res[prediction_idx]
         current_sign = signs[prediction_idx]
-
-        # LIVE STATUS IN TERMINAL
         print(f"AI Thinking: {current_sign} ({int(confidence*100)}%)", end='\r')
 
         if confidence > threshold:
             current_time = time.time()
-            
-            # TRIGGER VOICE
             if current_sign != last_spoken and not speech_lock:
                 if (current_time - last_speech_time > 2.0):
                     print(f"\n✅ SPEAKING: {current_sign}")
                     speak(current_sign)
                     last_spoken = current_sign
                     last_speech_time = current_time
-
-            # UI TEXT (Matches the voice)
             cv2.rectangle(frame, (0, 420), (640, 480), (0, 0, 0), -1)
             cv2.putText(frame, f"{current_sign}", (20, 465), 
                         cv2.FONT_HERSHEY_DUPLEX, 1.5, (0, 255, 0), 3)
             box_color = (0, 255, 0)
         else:
-            # Reset if hand leaves or confidence is low
             last_spoken = ""
             box_color = (255, 0, 0)
-
-        # Confidence Bar UI
         bar_width = int(confidence * box_size)
         cv2.rectangle(frame, (start_x, start_y - 20), (start_x + bar_width, start_y - 5), box_color, -1)
 
