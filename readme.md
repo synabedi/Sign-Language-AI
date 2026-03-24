@@ -1,24 +1,39 @@
-🤟 Sign Language AI Interpreter (macOS)
-A real-time Computer Vision application that uses a Convolutional Neural Network (CNN) to translate American Sign Language (ASL) gestures into text and synchronized speech on macOS.
+# 🤟 Real-Time ASL Sign Language Interpreter
+### 🤖 Powered by CNN & macOS Native Voice
 
-🌟 Project Highlights
-High Accuracy: Optimized CNN model achieving 98% validation accuracy.
+This project is a real-time American Sign Language (ASL) interpreter that uses a **Convolutional Neural Network (CNN)** to recognize gestures and provide **instant voice feedback** on macOS.
 
-Real-Time Translation: Processes live video at 30+ FPS with a 20-frame sequence buffer for smooth detection.
+---
 
-Native Voice Integration: Uses a multi-threaded os.system bridge to trigger the native macOS "Siri" voice without lagging the video feed.
+## 🌟 Key Features
+* **98% Model Accuracy:** Optimized CNN architecture for precise gesture recognition.
+* **Sequence-Based Detection:** Processes a 20-frame buffer to ensure smooth, non-flickering results.
+* **Native Voice Feedback:** Integrated with the macOS `say` command via multi-threading for zero-lag audio.
+* **Smart Synchronization:** Built-in `speech_lock` prevents audio overlapping and ensures the text matches the voice.
 
-State-Lock Logic: Custom synchronization logic to prevent "audio stuttering" and overlapping speech.
+---
 
-🛠️ Technical Stack
-Deep Learning: TensorFlow / Keras (CNN)
+## 🛠️ Technical Specifications
+| Component | Technology |
+| :--- | :--- |
+| **Deep Learning** | TensorFlow / Keras (CNN) |
+| **Computer Vision** | OpenCV (Grayscale & ROI Processing) |
+| **Audio Engine** | macOS Native Speech Synthesis |
+| **Optimization** | Python Multi-threading & NumPy |
 
-Computer Vision: OpenCV (ROI processing, Grayscale conversion)
 
-Speech: macOS Native Speech Synthesis (say command)
 
-Development: Python 3.9+, NumPy, Threading
+---
 
-📊 Supported Gestures
-The model is trained to recognize and speak the following 10 signs:
-HELLO, YES, NO, COME, OK, SPIN, CLAP, UP, DOWN, GO_AWAY
+## 📊 Supported Gestures
+The system currently recognizes and speaks the following **10 signs**:
+1. `HELLO` 2. `YES` 3. `NO` 4. `COME` 5. `OK`
+6. `SPIN` 7. `CLAP` 8. `UP` 9. `DOWN` 10. `GO_AWAY`
+
+---
+
+## 🚀 Installation & Usage
+1. **Clone the Project:**
+   ```bash
+   git clone [https://github.com/your-username/signproject.git](https://github.com/your-username/signproject.git)
+   cd signproject
